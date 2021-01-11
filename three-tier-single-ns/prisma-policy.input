@@ -1,0 +1,42 @@
+APIVersion: 0
+data:
+  networkaccesspolicies:
+    - logsEnabled: true
+      name: Backend to Backend
+      object:
+        - - $namespace={{ .Prisma.Namespace }}
+          - app=backend
+      propagate: true
+      subject:
+        - - $namespace={{ .Prisma.Namespace }}
+          - app=backend
+    - logsEnabled: true
+      name: Frontend to Middleware
+      object:
+        - - $namespace={{ .Prisma.Namespace }}
+          - app=middleware
+      propagate: true
+      subject:
+        - - $namespace={{ .Prisma.Namespace }}
+          - app=frontend
+    - logsEnabled: true
+      name: Middleware to Backend
+      object:
+        - - $namespace={{ .Prisma.Namespace }}
+          - app=backend
+      propagate: true
+      subject:
+        - - $namespace={{ .Prisma.Namespace }}
+          - app=middleware
+    - logsEnabled: true
+      name: Middleware to Middleware
+      object:
+        - - $namespace={{ .Prisma.Namespace }}
+          - app=middleware
+      propagate: true
+      subject:
+        - - $namespace={{ .Prisma.Namespace }}
+          - app=middleware
+identities:
+  - networkaccesspolicy
+label: {{ .Prisma.Label }}
