@@ -40,10 +40,10 @@
 
         stage('Deploy') {
             steps {
-                withCredentials([file(credentialsId: 'FlyingCloud', variable: 'CREDS')]) {
+                withCredentials([file(credentialsId: 'FlyingCloudKubeConfig', variable: 'CREDS')]) {
                     sh './kubectl --kubeconfig=$CREDS apply -f app/memphis/build/kubernetes-app.yaml'
                 }
-                withCredentials([file(credentialsId: 'Aporeto', variable: 'CREDS')]) {
+                withCredentials([file(credentialsId: 'AporetoCreds', variable: 'CREDS')]) {
                     sh 'apoctl api --creds $CREDS -n /panwdevapp2/jody/flyingcloud/memphis import --file app/memphis/build/prisma-policy.yaml'
                 }
             }
