@@ -1,4 +1,4 @@
-# three-tier-single-ns
+# memphis
 
 ## Overview
 This is a simple three tier application consisting of a frontned, middleware and backend pod set.
