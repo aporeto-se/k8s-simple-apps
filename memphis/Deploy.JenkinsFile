@@ -31,7 +31,7 @@
             steps {
                 sh (
                     """
-                    git clone https://github.com/aporeto-se/simple-k8s-3tier-app.git app
+                    git clone https://github.com/aporeto-se/k8s-simple-apps.git app
                     app/memphis/build.sh /panwdevapp2/jody/flyingcloud/memphis
                     """
                 )
