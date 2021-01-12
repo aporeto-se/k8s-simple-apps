@@ -1,0 +1,52 @@
+ pipeline {
+    agent any
+
+    stages {
+
+        stage('Preflight') {
+            steps {
+                script {
+                    if (!fileExists('apoctl')) {
+                        sh (
+                            """
+                            curl -o apoctl -LO "https://east-01.network.prismacloud.io/repos/apoctl/linux/apoctl"
+                            chmod +x apoctl
+                            """
+                        )
+                    }
+
+                    if (!fileExists('kubectl')) {
+                        sh (
+                            """
+                            curl -o kubectl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.1/bin/linux/amd64/kubectl"
+                            chmod +x kubectl
+                            """
+                        )
+                    }
+                }
+            }
+        }
+
+        stage('Generate Config') {
+            steps {
+                sh (
+                    """
+                    git clone https://github.com/aporeto-se/simple-k8s-3tier-app.git app
+                    app/memphis/build.sh /panwdevapp2/jody/flyingcloud/memphis
+                    """
+                )
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                withCredentials([file(credentialsId: 'FlyingCloud', variable: 'CREDS')]) {
+                    sh './kubectl --kubeconfig=$CREDS apply -f app/memphis/build/kubernetes-app.yaml'
+                }
+                withCredentials([file(credentialsId: 'Aporeto', variable: 'CREDS')]) {
+                    sh 'apoctl api --creds $CREDS -n /panwdevapp2/jody/flyingcloud/memphis import --file app/memphis/build/prisma-policy.yaml'
+                }
+            }
+        }
+    }
+ }

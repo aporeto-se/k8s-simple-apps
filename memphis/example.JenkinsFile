@@ -1,0 +1,47 @@
+ pipeline {
+    agent any
+
+    parameters {
+        string(name: 'Namespace',
+        description: 'The full Namespace eg. /prod/cluster/app')
+    }
+
+    stages {
+
+
+        stage('Preflight Check') {
+            steps {
+                if (params.Namespace == null) {
+                    error("Namespace is required")
+                }
+            }
+        }
+
+
+
+
+        stage('Generate Config') {
+            steps {
+                sh 'rm -rf app'
+                sh 'git clone https://github.com/aporeto-se/simple-k8s-3tier-app.git app'
+                sh 'app/build.sh /panwdevapp2/jody/flyingcloud/myapp'
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                sh 'kubectl delete ns myapp > /dev/null 2>&1 ||:'
+                sh 'kubectl create ns myapp'
+                sh 'kubectl create -f app/kubernetes-app.yaml'
+                withCredentials([file(credentialsId: 'Aporeto', variable: 'APPCREDS_FILE')]) {
+                    sh 'apoctl api --creds $APPCREDS_FILE import --file app/prisma-policy.yaml'
+                }
+                
+            }
+        }
+    }
+ }
+
+
+
+ 

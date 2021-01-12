@@ -12,9 +12,8 @@ main() {
   [[ "$ns" ]] || { err "Provide namespace as first arg or set env var NAMESPACE"; return 2; }
 
   mkdir -p build
-  cd build
-  echoapp "$ns" > kubernetes-app.yaml || return 3
-  echopolicy "$ns" > prisma-policy.yaml || return 3
+  echoapp "$ns" > build/kubernetes-app.yaml || return 3
+  echopolicy "$ns" > build/prisma-policy.yaml || return 3
   err "Completed"
 }
 

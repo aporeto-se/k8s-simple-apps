@@ -1,3 +1,15 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: {{ .Kubernetes.Namespace }}
+  annotations:
+    net.beta.kubernetes.io/network-policy: |
+      {
+        "ingress": {
+          "isolation": "DefaultDeny"
+        }
+      }
+---
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
