@@ -1,4 +1,4 @@
- pipeline {
+  pipeline {
     agent any
 
     stages {
@@ -31,6 +31,7 @@
             steps {
                 sh (
                     """
+                    rm -rf app
                     git clone https://github.com/aporeto-se/k8s-simple-apps.git app
                     app/memphis/build.sh /panwdevapp2/jody/flyingcloud/memphis
                     """
@@ -44,7 +45,20 @@
                     sh './kubectl --kubeconfig=$CREDS apply -f app/memphis/build/kubernetes-app.yaml'
                 }
                 withCredentials([file(credentialsId: 'AporetoCreds', variable: 'CREDS')]) {
+                    sh 'apoctl api --creds $CREDS -n /panwdevapp2/jody/flyingcloud/memphis list discoverymode | grep ID | sed "s/,//g" | sed "s/\\"//g" | sed "s/ID: //g" > dmids'
                     sh 'apoctl api --creds $CREDS -n /panwdevapp2/jody/flyingcloud/memphis import --file app/memphis/build/prisma-policy.yaml'
+                }
+
+                script {
+                    env.WORKSPACE = pwd()
+                    def file = readFile "${env.WORKSPACE}/dmids"
+                    def lines = file.readLines()
+                    for (line in lines) {  
+                        withCredentials([file(credentialsId: 'AporetoCreds', variable: 'CREDS')]) {
+                            echo x
+                            sh 'apoctl api --creds $CREDS -n /panwdevapp2/jody/flyingcloud/memphis delete discoverymode ${x}'
+                        }
+                    }
                 }
             }
         }
