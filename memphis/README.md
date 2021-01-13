@@ -27,13 +27,17 @@ event every 2 seconds. The event is customized per podset type (frontend, middle
 ## Usage
 
 ### Overview
-Clone the repo to disk. Then either set the env var NAMESPACE and run the 'build.sh' command or run
-the 'build.sh' command with the namespace as the first argument. The namespace should be the full
-Prisma Cloud Identity Segmentation namespace.
+Clone the repo to disk and set the env vars NAMESPACE, KUBECONFIG, and PRISMA_CREDS. Then run the
+script deploy.sh
 
 ### Example
 ```bash
-git clone https://github.com/aporeto-se/k8s-simple-apps.git
-cd k8s-simple-apps/three-tier-single-ns
-./build.sh /prod/cloud/cluster/app
+export NAMESPACE=/panwdevapp2/jody/flyingcloud/memphis
+export KUBECONFIG=/my/kube.config
+export PRISMA_CREDS=/my/prismacreds.json
+git clone https://github.com/aporeto-se/k8s-simple-apps.git app
+./app/memphis/deploy.sh
 ```
+
+### Jenkins
+A Jenkins pipeline script is also provided. It performs the same actions as the example.

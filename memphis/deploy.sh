@@ -37,6 +37,7 @@ function _prismacleanup() {
   local dm
   dm=$(apoctl api --api "$PRISMA_API" -n "$NAMESPACE" --creds "$PRISMA_CREDS" list discoverymode | jq -r '.[].ID')
   for id in $dm; do
+    err "Removing discoverymode policy ${id}"
     apoctl api --api "$PRISMA_API" -n "$NAMESPACE" --creds "$PRISMA_CREDS" delete discoverymode "$id" || return 3
   done
 }
@@ -53,6 +54,8 @@ function _install_util() {
     err "System type ${uname} not supported"
     return 2
   fi
+
+  err "host type is ${type}"
 
   [ -f apoctl ] && {
     err "apoctl already installed"
