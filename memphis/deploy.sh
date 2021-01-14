@@ -34,6 +34,11 @@ function _deploy() {
 
 function _prismacleanup() {
   # This disables discoverymode which is enabled by default (not by us)
+
+  # If the ns was just created we need to wait or the commands below will fail
+  err "Sleeping for 10 seconds before running cleanup"
+  sleep 10
+
   local dm
   dm=$(apoctl api --api "$PRISMA_API" -n "$NAMESPACE" --creds "$PRISMA_CREDS" list discoverymode | jq -r '.[].ID')
   for id in $dm; do
