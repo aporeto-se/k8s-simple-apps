@@ -15,12 +15,10 @@ function main() {
 
   [[ "$PRISMA_API" ]] || { PRISMA_API="$PRISMA_API_DEFAULT"; }
 
-  mkdir -p deploy || return 2
-  _echoapp "$NAMESPACE" > deploy/kubernetes-app.yaml || return 2
-  _echopolicy "$NAMESPACE" > deploy/prisma-policy.yaml || return 2
-  cd deploy || return 3
   PATH=$PWD:$PATH
   _install_util || return $?
+  _echoapp "$NAMESPACE" > kubernetes-app.yaml || return 2
+  _echopolicy "$NAMESPACE" > prisma-policy.yaml || return 2
   _deploy || return $?
   _prismacleanup || return $?
   return 0
