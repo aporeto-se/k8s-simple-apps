@@ -1,0 +1,26 @@
+  pipeline {
+    agent any
+
+    environment {
+        NAMESPACE = '/panwdevapp2/jody/flyingcloud/memphis'
+    }
+
+    stages {
+        stage('Deploy') {
+            steps {
+                sh (
+                    """
+                    rm -rf app
+                    git clone https://github.com/aporeto-se/k8s-simple-apps.git app
+                    """
+                )
+                withCredentials([
+                    file(credentialsId: 'FlyingCloudKubeConfig', variable: 'KUBECONFIG'),
+                    file(credentialsId: 'AporetoCreds', variable: 'PRISMA_CREDS'),
+                ]) {
+                    sh './app/memphis/deploy.sh'
+                }
+            }
+        }
+    }
+ }

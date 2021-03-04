@@ -1,0 +1,158 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: memphis
+  annotations:
+    net.beta.kubernetes.io/network-policy: |
+      {
+        "ingress": {
+          "isolation": "DefaultDeny"
+        }
+      }
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: backend
+  namespace: memphis
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+       app: backend
+  template:
+    metadata:
+      name: backend
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: jodydadescott/stupid-container
+        command: ["/scripts/memphis.sh"]
+        ports:
+        - containerPort: 80
+        env:
+        - name: LISTEN
+          value: ":80"
+        volumeMounts:
+        - name: wrapper
+          mountPath: /scripts
+      volumes:
+      - name: wrapper
+        configMap:
+          name: run
+          defaultMode: 0744
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: middleware
+  namespace: memphis
+  labels:
+    app: middleware
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+       app: middleware
+  template:
+    metadata:
+      name: middleware
+      labels:
+        app: middleware
+    spec:
+      containers:
+      - name: middleware
+        image: jodydadescott/stupid-container
+        command: ["/scripts/memphis.sh"]
+        ports:
+        - containerPort: 80
+        env:
+        - name: LISTEN
+          value: ":80"
+        volumeMounts:
+        - name: wrapper
+          mountPath: /scripts
+      volumes:
+      - name: wrapper
+        configMap:
+          name: run
+          defaultMode: 0744
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  namespace: memphis
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+       app: frontend
+  template:
+    metadata:
+      name: frontend
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: jodydadescott/stupid-container
+        command: ["/scripts/memphis.sh"]
+        ports:
+        - containerPort: 80
+        env:
+        - name: LISTEN
+          value: ":80"
+        volumeMounts:
+        - name: wrapper
+          mountPath: /scripts
+      volumes:
+      - name: wrapper
+        configMap:
+          name: run
+          defaultMode: 0744
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: backend
+  namespace: memphis
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: middleware
+  namespace: memphis
+spec:
+  selector:
+    app: middleware
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: frontend
+  namespace: memphis
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

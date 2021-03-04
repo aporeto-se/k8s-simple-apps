@@ -1,0 +1,65 @@
+APIVersion: 0
+data:
+  apiauthorizationpolicies:
+    - annotations:
+        'aporeto:cactuar:appcredential:id':
+          - 6036af8126571c0001bc6f3e
+        'aporeto:createdby':
+          - 'aporeto:cactuar'
+      authorizedIdentities:
+        - '@auth:role=enforcer'
+      authorizedNamespace: /806775361903163392/jody/kx2
+      description: >-
+        Authorization associated with appcredential
+        'enforcerd-9772058827537148930'
+      name: >-
+        [auto] api authorization for app credentials
+        'enforcerd-9772058827537148930'
+      propagationHidden: true
+      protected: true
+      subject:
+        - - >-
+            @auth:commonname=app:credential:6036af8126571c0001bc6f3e:enforcerd-9772058827537148930
+          - '@auth:organization=/806775361903163392/jody/kx2'
+          - '@auth:realm=certificate'
+  automations: []
+  enforcerprofilemappingpolicies: []
+  enforcerprofiles: []
+  externalnetworks:
+    - associatedTags:
+        - 'ext:net=kubedns'
+      entries:
+        - 172.20.0.10/32
+      name: Kube DNS
+      propagate: true
+  filepaths: []
+  hookpolicies: []
+  hostservicemappingpolicies: []
+  hostservices: []
+  httpresourcespecs: []
+  namespacemappingpolicies: []
+  networkaccesspolicies: []
+  oidcproviders: []
+  quotapolicies: []
+  servicedependencies: []
+  services: []
+  tokenscopepolicies: []
+identities:
+  - apiauthorizationpolicy
+  - automation
+  - enforcerprofile
+  - enforcerprofilemappingpolicy
+  - externalnetwork
+  - filepath
+  - httpresourcespec
+  - hookpolicy
+  - hostservice
+  - hostservicemappingpolicy
+  - namespacemappingpolicy
+  - networkaccesspolicy
+  - oidcprovider
+  - quotapolicy
+  - service
+  - servicedependency
+  - tokenscopepolicy
+label: Weaverluminous Warrior
