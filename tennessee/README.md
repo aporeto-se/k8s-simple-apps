@@ -75,12 +75,12 @@ Have this application up and running. Then start from the App Visibility pane an
 2. Deploy this application with no policy (learning mode)
 3. Observe dotted flows from workloads to Kube-DNS
 4. Create Kube-DNS policy
-5. Observe DNS dotted flows transistioning to solid
+5. Observe DNS dotted flows transitioning to solid
 6. Observe dotted flows from workloads to workloads (application)
 8. Create policy for application
-9. Observe application dotted flows transistioning to solid
+9. Observe application dotted flows transitioning to solid
 10. Disable learning mode
-11. Run scripts to generate rogue traffic
+11. Run scripts to generate rouge traffic
 12. Observe flows are denied
 13. Policy should be "default deny"
 14. Wait for denied flows to age out (5 minutes)
