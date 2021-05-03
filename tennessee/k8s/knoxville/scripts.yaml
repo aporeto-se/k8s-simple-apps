@@ -1,0 +1,95 @@
+apiVersion: v1
+data:
+  backend: |
+    #!/bin/bash
+
+    /usr/bin/stupid-curl "database.nashville.svc.cluster.local"
+  frontend: |
+    #!/bin/bash
+
+    /usr/bin/stupid-curl "backend.${POD_NAMESPACE}.svc.cluster.local"
+  run: |
+    #!/bin/bash
+
+    main() {
+      err "Init"
+      [[ "$POD_NAMESPACE" ]] || { err "Missing required env variable POD_NAMESPACE"; return 2; }
+      [[ "$POD_APP" ]] || { err "Missing required env variable POD_APP"; return 2; }
+      err "Running"
+      run=true
+      trap sigterm SIGTERM
+      trap sigint SIGINT
+      trap sighup SIGHUP
+      err ""
+      event_loop || { err "Fatal!"; return 3; }
+      err "Goodbye"
+    }
+
+    event_loop() {
+      sleep_for 10
+
+      [ -f /usr/bin/stupid-curl ] || {
+        err "Utility /usr/bin/stupid-curl not found"
+        return 2
+      }
+
+      /usr/bin/stupid-curl 127.0.0.1 > /dev/null 2>&1 || {
+        err "Starting http server"
+        /usr/sbin/stupid-http &
+      }
+
+      $run || return 0
+      cd "$(dirname "$0")" || { err "Unable to determine working directory"; return 3; }
+      [ -f "$POD_APP" ] || { err "Script ${POD_APP} not found"; return 3; }
+
+      while $run; do
+        sleep_for 1
+        $run || return 0
+        [ -f "$POD_APP" ] || { err "Script ${POD_APP} not found"; return 3; }
+        err "Running script"
+        bash "$POD_APP"
+      done
+    }
+
+    sigterm() {
+      err "Caught SIGTERM"
+      run=false
+    }
+
+    sigint() {
+      err "Caught SIGINT"
+      run=false
+    }
+
+    sighup() {
+      err "Caught SIGHUP"
+    }
+
+    sleep_for() {
+      local t=$1
+      [ "$t" -eq "$t" ] || { err "$t is must be a positive integer"; return 2; }
+      [ "$t" -gt 0 ] || { err "$t is an integer but must be positived"; return 2; }
+      err "Sleeping for $t second(s)"
+      local c=0
+      while $run; do
+        ((c=c+1))
+        [ "$c" -gt "$t" ] && return 0
+        sleep 1
+      done
+    }
+
+    sleep_forever() {
+      err "Sleeping forever (or until killed)"
+      while $run; do
+        sleep 1
+      done
+    }
+
+    err() { echo "$@" 1>&2; }
+
+    main "$@"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: run
+  namespace: knoxville

@@ -1,0 +1,60 @@
+APIVersion: 0
+data:
+  networkrulesetpolicies:
+    - incomingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+              - '@org:group={{.Values.org.group}}'
+              - '@org:tenant={{.Values.org.tenant}}'
+              - '@org:kubernetes=nashville'
+              - app=database
+          observationEnabled: false
+          protocolPorts:
+            - any
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+              - '@org:group={{.Values.org.group}}'
+              - '@org:tenant={{.Values.org.tenant}}'
+              - '@org:kubernetes=memphis'
+              - app=backend
+          observationEnabled: false
+          protocolPorts:
+            - any
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+              - '@org:group={{.Values.org.group}}'
+              - '@org:tenant={{.Values.org.tenant}}'
+              - '@org:kubernetes=knoxville'
+              - app=backend
+          observationEnabled: false
+          protocolPorts:
+            - any
+      name: database
+      outgoingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+              - '@org:group={{.Values.org.group}}'
+              - '@org:tenant={{.Values.org.tenant}}'
+              - '@org:kubernetes=nashville'
+              - app=database
+          observationEnabled: false
+          protocolPorts:
+            - any
+      propagate: true
+      subject:
+        - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+          - '@org:group={{.Values.org.group}}'
+          - '@org:tenant={{.Values.org.tenant}}'
+          - '@org:kubernetes=nashville'
+          - app=database
+identities:
+  - networkrulesetpolicy
+label: CICD

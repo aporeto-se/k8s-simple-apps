@@ -1,0 +1,46 @@
+              - '@org:kubernetes=knoxville'
+
+APIVersion: 0
+data:
+  networkrulesetpolicies:
+    - description: Explicitly deny from account 10 to account 30
+      disabled: true
+      name: SecOPS
+      outgoingRules:
+        - action: Reject
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+              - '@org:group={{.Values.org.group}}'
+              - '@org:tenant={{.Values.org.tenant}}'
+              - sim-account=30
+          observationEnabled: false
+          protocolPorts:
+            - any
+      propagate: true
+      subject:
+        - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+          - '@org:group={{.Values.org.group}}'
+          - '@org:tenant={{.Values.org.tenant}}'
+          - sim-account=10
+    - name: kube-dns
+      outgoingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+              - '@org:group={{.Values.org.group}}'
+              - '@org:tenant={{.Values.org.tenant}}'
+              - 'externalnetwork:name=kube-dns'
+          observationEnabled: false
+          protocolPorts:
+            - tcp/53
+            - udp/53
+      propagate: true
+      subject:
+        - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+          - '@org:group={{.Values.org.group}}'
+          - '@org:tenant={{.Values.org.tenant}}'
+identities:
+  - networkrulesetpolicy
+label: CICD
