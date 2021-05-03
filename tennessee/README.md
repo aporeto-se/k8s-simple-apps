@@ -87,3 +87,5 @@ Have this application up and running. Then start from the App Visibility pane an
 15. Create SecOPS policy to restrict simulated account 10 to 30 (sim-account=10 to sim-account=30)
 16. Observe flows are denied
 17. Check that policy is "SecOPS"
+
+![App](images/app.png)
