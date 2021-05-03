@@ -51,12 +51,9 @@ make
 ./create-policy.sh
 cd ../k8s
 ./deploy.sh
-
-# Verify flows
-./rogue-frontend
-./rouge-backend
 ```
 
-
-
-
+### Notes
+1. The search/filter capability in the UI can be used to observe this demo only. The filter is "filter=demo"
+2. Group on tags such as $namespace, sim-cloud, sim-region, and app
+3. Logical groupings are $namespace then sim-cloud, $namespace then sim-cloud then sim-region, sim-account then app
