@@ -57,3 +57,33 @@ cd ../k8s
 1. The search/filter capability in the UI can be used to observe this demo only. The filter is "filter=demo"
 2. Group on tags such as $namespace, sim-cloud, sim-region, and app
 3. Logical groupings are $namespace then sim-cloud, $namespace then sim-cloud then sim-region, sim-account then app
+
+## Demo & POV
+
+### Demo
+Have this application up and running. Then start from the App Visibility pane and cover the following.
+1. Flow Visibility: Green flows permitted, red flows denied, flows have direction
+2. Workload Identity: Show a workload identity (Cloud Provider, Cloud Account, Cloud Region, Cloud VPC, K8S, etc)
+3. Show Ruleset and explain
+4. Return to visibility and show that flows have matching policy
+5. Show logging: Demo search, talk about time window, etc
+6. Show namespaces: Drop down in namespace tree and then back up
+7. Demo K8S namespace to Prisma namespace mapping
+
+### POV
+1. Deploy enforcer(s) on K8S cluster
+2. Deploy this application with no policy (learning mode)
+3. Observe dotted flows from workloads to Kube-DNS
+4. Create Kube-DNS policy
+5. Observe DNS dotted flows transitioning to solid
+6. Observe dotted flows from workloads to workloads (application)
+8. Create policy for application
+9. Observe application dotted flows transitioning to solid
+10. Disable learning mode
+11. Run scripts to generate rouge traffic
+12. Observe flows are denied
+13. Policy should be "default deny"
+14. Wait for denied flows to age out (5 minutes)
+15. Create SecOPS policy to restrict simulated account 10 to 30 (sim-account=10 to sim-account=30)
+16. Observe flows are denied
+17. Check that policy is "SecOPS"
