@@ -1,0 +1,80 @@
+APIVersion: 0
+data:
+  networkrulesetpolicies:
+    - name: frontend
+      outgoingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount=jody'
+              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:tenant=806775361903163392'
+              - '@org:kubernetes=knoxville'
+              - app=backend
+          observationEnabled: false
+          protocolPorts:
+            - any
+      propagate: true
+      subject:
+        - - '@org:cloudaccount=jody'
+          - '@org:group=k1-us-east-2-eksctl-io'
+          - '@org:tenant=806775361903163392'
+          - '@org:kubernetes=knoxville'
+          - app=frontend
+    - incomingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount=jody'
+              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:tenant=806775361903163392'
+              - '@org:kubernetes=knoxville'
+              - app=backend
+          observationEnabled: false
+          protocolPorts:
+            - any
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount=jody'
+              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:tenant=806775361903163392'
+              - '@org:kubernetes=knoxville'
+              - app=frontend
+          observationEnabled: false
+          protocolPorts:
+            - any
+      name: backend
+      outgoingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount=jody'
+              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:tenant=806775361903163392'
+              - '@org:kubernetes=knoxville'
+              - app=backend
+          observationEnabled: false
+          protocolPorts:
+            - any
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount=jody'
+              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:tenant=806775361903163392'
+              - '@org:kubernetes=knoxville'
+              - app=database
+          observationEnabled: false
+          protocolPorts:
+            - any
+      propagate: true
+      subject:
+        - - '@org:cloudaccount=jody'
+          - '@org:group=k1-us-east-2-eksctl-io'
+          - '@org:tenant=806775361903163392'
+          - '@org:kubernetes=knoxville'
+          - app=backend
+identities:
+  - networkrulesetpolicy
+label: CICD
