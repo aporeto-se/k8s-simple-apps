@@ -32,7 +32,7 @@ Kubernetes configuration is provided in YAML format. No changes should be necess
 
 ### Example
 ```bash
-git pull
+git pull https://github.com/aporeto-se/k8s-simple-apps.git
 cd k8s-simple-apps/tennessee/prisma
 # Set the CLOUD, GROUP and TENANT variables in the file 'Makefile'
 make
