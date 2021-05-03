@@ -1,56 +1,29 @@
 # tennessee
 
 ## Overview
-This is a simple Kubernetes application that simulates network connectivity between three
-namespaces running on the same cluster. 
+This is a simple Kubernetes application that simulates network connectivity between three namespaces running on the same cluster. The namespaces are named Nashville, Memphis and Knoxville. Memphis and Knoxville are sibling cities. Nashville is the state capital. The sibling cities have a dependency on the capital.
 
-The three namespaces are named Nashville, Memphis and
-Knoxville. The Nashville namespace runs a single pod called database. Memphis and Knoxville
-each run a frontend and backend pod. Memphis and Knoxville our sibling applications that
-depend on Knoxville.
+## Simulated Cloud, Region & Account
+The tags 'sim-cloud', 'sim-region' and 'sim-account' are used for simulation purposes. This allows us to simulate multiple clouds, regions and accounts within our single cluster. To accompolish this each deployment.yaml is composed of multiple deployments with these aforementioned tags. For example a podset named frontend will actually be named frontend1, frontend2, frontend...N.
 
-## Operation
+## Network Flows
 
-### Nashville
-Nashville is the capital of Tennessee. It runs 
+### City (Memphis & Knoxville)
+A city is composed of a frontend and a backend. The frontend communicates with the backend and the backend communicates with the database running in Nashville. No other flows should be permitted. For clarification the frontend for a given city should only communicate with the backed located in the same city. Frontends should not communicate with each other. Backends should not originate connections to anywhere except the database in Nashville.
 
-Memphis has a pod called frontend and a pod called backend. The frontend simulates a web 
-frontend. It connects to the backend. 
+### Capital (Nashville)
+Nashville simulates a database cluster. It has a single deployment called database. Database podsets communicate with other database podsets and accept inbound from city backends.
 
-Memphis and Knoxville each have a pod called frontend that connects to backend 
+## Policy
 
-The Frontned podset terminates inbound http(s) connections and is generally stateless.
-All client request must be forwarded to the Middleware podset. The Middlware represents the
-business logic. The Middlware holds state and must form a cluster with the other Middlware podsets.
-Finally the Backend podset represents the Database layer.
+### Infrasturcutre
+A policy is included that will permit any workload running on the cluster to access the cluster DNS (Kube DNS). This demonstrates how infrasturcutre policies need only be created once and then inherited by new applications.
 
-### Rules
-1. Frontend podset may accept inbound from anywhere
-1. Middleware podset may accept inbound from Frontend podset and make connections to Middlware
-podset and Backend podset
-1. Backend podset may accept inbound from Middlware podset and make connections to Backend podset
-1. All pods may communicate with infrasturucutre such as DNS
-1. Anything not explicity permitted should be denied. For example Frontend to Frontend podset
-communication is not explicity permitted hence it should be denied.
+### SecOPS / Org
+A policy is included that will restrict flows from sim-account=10 to sim-account=30. This demonstrates how the SecOPS team can create policy that is inherited by children and can not be overridden.
 
-### Scripts
-Each script starts a webserver and then runs an infinite event loop. The event loop will call and
-event every 2 seconds. The event is customized per podset type (frontend, middleware, backend).
+### Application
+Policy configuration for each namespace is provided. The configuration for Memphis and Knoxville is virtually identical.
 
-## Usage
-
-### Overview
-Clone the repo to disk and set the env vars NAMESPACE, KUBECONFIG, and PRISMA_CREDS. Then run the
-script deploy.sh
-
-### Example
-```bash
-export NAMESPACE=/panwdevapp2/jody/flyingcloud/memphis
-export KUBECONFIG=/my/kube.config
-export PRISMA_CREDS=/my/prismacreds.json
-git clone https://github.com/aporeto-se/k8s-simple-apps.git app
-./app/memphis/deploy.sh
-```
-
-### Jenkins
-A Jenkins pipeline script is also provided. It performs the same actions as the example.
+## Deployment
+Kubernetes configuration is provided in YAML format. No changes should be necessary. Prisma configuration is dependendent on the Prisma Tenant ID, org and Kubernetes cluster name. Edit the file 'Makefile' in the directory prisma and run 'make'.
