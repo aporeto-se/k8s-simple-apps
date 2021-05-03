@@ -26,4 +26,21 @@ A policy is included that will restrict flows from sim-account=10 to sim-account
 Policy configuration for each namespace is provided. The configuration for Memphis and Knoxville is virtually identical.
 
 ## Deployment
+
+### Overeview
 Kubernetes configuration is provided in YAML format. No changes should be necessary. Prisma configuration is dependent on the Prisma Tenant ID, org and Kubernetes cluster name. Edit the file 'Makefile' in the directory prisma and run 'make'.
+
+### Example
+```bash
+git pull
+cd k8s-simple-apps/tennessee/prisma
+# Set the CLOUD, GROUP and TENANT variables in the file 'Makefile'
+make
+cd ../k8s
+./deploy.sh
+
+```
+
+
+
+
