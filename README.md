@@ -4,4 +4,4 @@ A collection of simple Kubernetes applications and utilities for Proof Of Concep
 
 [Jenkins (AWS) - A Jenkins application for AWS](jenkins-aws)
 
-[Memphis - Three Tier Single Namespace Application](memphis)
+[Tennessee - Multi-namespace Simulated App](tennessee)
