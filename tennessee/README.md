@@ -25,20 +25,34 @@ A policy is included that will restrict flows from sim-account=10 to sim-account
 ### Application
 Policy configuration for each namespace is provided. The configuration for Memphis and Knoxville is virtually identical.
 
+## Rouge Traffic
+Rogue traffic can be generated in Memphis by running rogue-frontend or rogue-backend in the directory k8s
+
 ## Deployment
 
-### Overeview
-Kubernetes configuration is provided in YAML format. No changes should be necessary. Prisma configuration is dependent on the Prisma Tenant ID, org and Kubernetes cluster name. Edit the file 'Makefile' in the directory prisma and run 'make'.
+### Steps
+1. Clone this repo
+2. Change into the directory tennessee/prisma
+3. Set the variables CLOUD, GROUP and TENANT in the file Makefile
+4. Run make
+5. If the namespaces do not already exist in prisma create them with ./create-ns.sh
+6. Install the policy with ./create-policy.sh
+7. Change into the directory tennessee/k8s
+8. Deploy with the command ./deploys.sh
 
 ### Example
 ```bash
 git pull https://github.com/aporeto-se/k8s-simple-apps.git
 cd k8s-simple-apps/tennessee/prisma
-# Set the CLOUD, GROUP and TENANT variables in the file 'Makefile'
 make
+./create-ns.sh
+./create-policy.sh
 cd ../k8s
 ./deploy.sh
 
+# Verify flows
+./rogue-frontend
+./rouge-backend
 ```
 
 
