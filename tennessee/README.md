@@ -4,7 +4,7 @@
 This is a simple Kubernetes application that simulates network connectivity between three namespaces running on the same cluster. The namespaces are named Nashville, Memphis and Knoxville. Memphis and Knoxville are sibling cities. Nashville is the state capital. The sibling cities have a dependency on the capital.
 
 ## Simulated Cloud, Region & Account
-The tags 'sim-cloud', 'sim-region' and 'sim-account' are used for simulation purposes. This allows us to simulate multiple clouds, regions and accounts within our single cluster. To accompolish this each deployment.yaml is composed of multiple deployments with these aforementioned tags. For example a podset named frontend will actually be named frontend1, frontend2, frontend...N.
+The tags 'sim-cloud', 'sim-region' and 'sim-account' are used for simulation purposes. This allows us to simulate multiple clouds, regions and accounts within our single cluster. To accomplish this each deployment.yaml is composed of multiple deployments with these aforementioned tags. For example a podset named frontend will actually be named frontend1, frontend2, frontend...N.
 
 ## Network Flows
 
@@ -16,8 +16,8 @@ Nashville simulates a database cluster. It has a single deployment called databa
 
 ## Policy
 
-### Infrasturcutre
-A policy is included that will permit any workload running on the cluster to access the cluster DNS (Kube DNS). This demonstrates how infrasturcutre policies need only be created once and then inherited by new applications.
+### Infrastructure
+A policy is included that will permit any workload running on the cluster to access the cluster DNS (Kube DNS). This demonstrates how infrastructure policies need only be created once and then inherited by new applications.
 
 ### SecOPS / Org
 A policy is included that will restrict flows from sim-account=10 to sim-account=30. This demonstrates how the SecOPS team can create policy that is inherited by children and can not be overridden.
@@ -26,4 +26,4 @@ A policy is included that will restrict flows from sim-account=10 to sim-account
 Policy configuration for each namespace is provided. The configuration for Memphis and Knoxville is virtually identical.
 
 ## Deployment
-Kubernetes configuration is provided in YAML format. No changes should be necessary. Prisma configuration is dependendent on the Prisma Tenant ID, org and Kubernetes cluster name. Edit the file 'Makefile' in the directory prisma and run 'make'.
+Kubernetes configuration is provided in YAML format. No changes should be necessary. Prisma configuration is dependent on the Prisma Tenant ID, org and Kubernetes cluster name. Edit the file 'Makefile' in the directory prisma and run 'make'.
