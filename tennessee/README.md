@@ -88,4 +88,13 @@ Have this application up and running. Then start from the App Visibility pane an
 16. Observe flows are denied
 17. Check that policy is "SecOPS"
 
+## Screen Shots
+
+### App
 ![App](images/app.png)
+
+### Account then App
+![AccountThenApp](images/sim-account-then-app.png)
+
+### Namespace then Cloud
+![NamespaceThenCloud](images/namespace-then-sim-cloud.png)
