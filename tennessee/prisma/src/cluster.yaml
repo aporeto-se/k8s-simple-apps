@@ -1,5 +1,3 @@
-              - '@org:kubernetes=knoxville'
-
 APIVersion: 0
 data:
   networkrulesetpolicies:
