@@ -17,7 +17,7 @@ build:
 	echo "apoctl api create namespace --namespace /$(TENANT)/$(CLOUD)/$(GROUP) --data '{\"name\": \"nashville\"}'" >> create-ns.sh
 	echo "apoctl api create namespace --namespace /$(TENANT)/$(CLOUD)/$(GROUP) --data '{\"name\": \"memphis\"}'" >> create-ns.sh
 	echo "apoctl api create namespace --namespace /$(TENANT)/$(CLOUD)/$(GROUP) --data '{\"name\": \"knoxville\"}'" >> create-ns.sh
-	echo "apoctl api -n /$(TENANT)/$(CLOUD)/$(GROUP) import --file config.yaml" >> create-policy.sh
+	echo "apoctl api -n /$(TENANT)/$(CLOUD)/$(GROUP) import --file cluster.yaml" >> create-policy.sh
 	echo "apoctl api -n /$(TENANT)/$(CLOUD)/$(GROUP)/nashville import --file nashville.yaml" >> create-policy.sh
 	echo "apoctl api -n /$(TENANT)/$(CLOUD)/$(GROUP)/memphis import --file memphis.yaml" >> create-policy.sh
 	echo "apoctl api -n /$(TENANT)/$(CLOUD)/$(GROUP)/knoxville import --file knoxville.yaml" >> create-policy.sh

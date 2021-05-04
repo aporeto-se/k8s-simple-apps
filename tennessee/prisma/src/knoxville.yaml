@@ -63,7 +63,7 @@ data:
             - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
               - '@org:group={{.Values.org.group}}'
               - '@org:tenant={{.Values.org.tenant}}'
-              - '@org:kubernetes=knoxville'
+              - '@org:kubernetes=nashville'
               - app=database
           observationEnabled: false
           protocolPorts:
