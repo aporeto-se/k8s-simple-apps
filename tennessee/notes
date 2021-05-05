@@ -1,7 +1,0 @@
-Filter: filter=demo
-
-Tags to group on: $namespace, sim-cloud, sim-region, and app
-
-$namespace then sim-cloud
-$namespace then sim-cloud then sim-region
-sim-account then app
