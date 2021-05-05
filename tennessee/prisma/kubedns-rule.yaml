@@ -1,0 +1,25 @@
+APIVersion: 0
+data:
+  networkrulesetpolicies:
+    - description: Cluster KubeDNS
+      name: kube-dns
+      outgoingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount=jody'
+              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:tenant=806775361903163392'
+              - 'externalnetwork:name=kube-dns'
+          observationEnabled: false
+          protocolPorts:
+            - tcp/53
+            - udp/53
+      propagate: true
+      subject:
+        - - '@org:cloudaccount=jody'
+          - '@org:group=k1-us-east-2-eksctl-io'
+          - '@org:tenant=806775361903163392'
+identities:
+  - networkrulesetpolicy
+label: KubeDNS CICD Rule

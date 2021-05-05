@@ -1,0 +1,12 @@
+APIVersion: 0
+data:
+  externalnetworks:
+    - associatedTags:
+        - 'externalnetwork:name=kube-dns'
+      entries:
+        - '10.100.0.10/32'
+      name: kube-dns
+      propagate: true
+identities:
+  - externalnetwork
+label: KubeDNS CICD Net
