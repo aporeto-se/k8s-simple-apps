@@ -1,0 +1,13 @@
+# Get this information from the Prisma Console
+export TENANT=806775361903163392
+export CLOUD=jody
+export GROUP=poppy
+export APOCTL_API=https://api.east-01.network.prismacloud.io
+
+export APOCTL_CREDS=appcreds.json
+
+# If KUBEDNS is not set then we will automatically resolve it
+# export KUBEDNS=
+
+# Probably dont change this
+export APOCTL_NAMESPACE="/${TENANT}/${CLOUD}/${GROUP}"

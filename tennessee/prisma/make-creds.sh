@@ -1,28 +1,24 @@
 #!/bin/bash
 
-# export APOCTL_API=https://api.east-01.network.prismacloud.io
-# export APOCTL_TOKEN=
+function main() {
 
+  cd "$(dirname "$0")" || return 2
+  [ -f settings ] && . settings
+  token=$1
+  [[ "$token" ]] || { err "Usage:$0 token"; return 2; }
 
+  local rc
+  rc=0
+  [ "$TENANT" ] || { err "Missing env var TENANT"; rc=2; }
+  [ "$CLOUD" ] || { err "Missing env var CLOUD"; rc=2; }
+  [ "$GROUP" ] || { err "Missing env var GROUP"; rc=2; }
+  [ "$rc" -eq 0 ] || return 3
 
-apoctl api create apiauthorizationpolicy \
---namespace /806775361903163392/jody/k1-us-east-2-eksctl-io \
---api  \
---data '{
-  "authorizedNamespace": "/806775361903163392/jody/k1-us-east-2-eksctl-io",
-  "allowsGet": false,
-  "allowsPost": false,
-  "allowsPut": false,
-  "allowsDelete": false,
-  "allowsPatch": false,
-  "allowsHead": true,
-  "authorizedIdentities": [
-    "@auth:role=namespace.administrator"
-  ],
-  "subject": [
-    [
-      "@auth:realm=pcidentitytoken"
-    ]
-  ],
-  "name": "appcreds"
-}'
+  apoctl --token "$token" appcred create cicdcreds -n /${TENANT}/${CLOUD}/${GROUP} --role @auth:role=namespace.administrator > $APOCTL_CREDS
+  rc=$?
+  [ "$rc" -eq 0 ] || { err "Failed"; return $rc; }
+}
+
+function err() { echo "$@" 1>&2; }
+
+main "$@"
