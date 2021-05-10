@@ -1,0 +1,101 @@
+{
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{\"prometheus.io/port\":\"9153\",\"prometheus.io/scrape\":\"true\"},\"labels\":{\"eks.amazonaws.com/component\":\"kube-dns\",\"k8s-app\":\"kube-dns\",\"kubernetes.io/cluster-service\":\"true\",\"kubernetes.io/name\":\"CoreDNS\"},\"name\":\"kube-dns\",\"namespace\":\"kube-system\"},\"spec\":{\"clusterIP\":\"10.100.0.10\",\"ports\":[{\"name\":\"dns\",\"port\":53,\"protocol\":\"UDP\"},{\"name\":\"dns-tcp\",\"port\":53,\"protocol\":\"TCP\"}],\"selector\":{\"k8s-app\":\"kube-dns\"}}}\n",
+            "prometheus.io/port": "9153",
+            "prometheus.io/scrape": "true"
+        },
+        "creationTimestamp": "2021-04-16T17:59:13Z",
+        "labels": {
+            "eks.amazonaws.com/component": "kube-dns",
+            "k8s-app": "kube-dns",
+            "kubernetes.io/cluster-service": "true",
+            "kubernetes.io/name": "CoreDNS"
+        },
+        "managedFields": [
+            {
+                "apiVersion": "v1",
+                "fieldsType": "FieldsV1",
+                "fieldsV1": {
+                    "f:metadata": {
+                        "f:annotations": {
+                            ".": {},
+                            "f:kubectl.kubernetes.io/last-applied-configuration": {},
+                            "f:prometheus.io/port": {},
+                            "f:prometheus.io/scrape": {}
+                        },
+                        "f:labels": {
+                            ".": {},
+                            "f:eks.amazonaws.com/component": {},
+                            "f:k8s-app": {},
+                            "f:kubernetes.io/cluster-service": {},
+                            "f:kubernetes.io/name": {}
+                        }
+                    },
+                    "f:spec": {
+                        "f:clusterIP": {},
+                        "f:ports": {
+                            ".": {},
+                            "k:{\"port\":53,\"protocol\":\"TCP\"}": {
+                                ".": {},
+                                "f:name": {},
+                                "f:port": {},
+                                "f:protocol": {},
+                                "f:targetPort": {}
+                            },
+                            "k:{\"port\":53,\"protocol\":\"UDP\"}": {
+                                ".": {},
+                                "f:name": {},
+                                "f:port": {},
+                                "f:protocol": {},
+                                "f:targetPort": {}
+                            }
+                        },
+                        "f:selector": {
+                            ".": {},
+                            "f:k8s-app": {}
+                        },
+                        "f:sessionAffinity": {},
+                        "f:type": {}
+                    }
+                },
+                "manager": "kubectl-client-side-apply",
+                "operation": "Update",
+                "time": "2021-04-16T17:59:13Z"
+            }
+        ],
+        "name": "kube-dns",
+        "namespace": "kube-system",
+        "resourceVersion": "183",
+        "selfLink": "/api/v1/namespaces/kube-system/services/kube-dns",
+        "uid": "fa7caddf-0803-48f2-9871-6c4b064a77c4"
+    },
+    "spec": {
+        "clusterIP": "10.100.0.10",
+        "ports": [
+            {
+                "name": "dns",
+                "port": 53,
+                "protocol": "UDP",
+                "targetPort": 53
+            },
+            {
+                "name": "dns-tcp",
+                "port": 53,
+                "protocol": "TCP",
+                "targetPort": 53
+            }
+        ],
+        "selector": {
+            "k8s-app": "kube-dns"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+    },
+    "status": {
+        "loadBalancer": {}
+    }
+}
+]1337;SetBadgeFormat=fi93b3Jrc3BhY2UvazhzLXNpbXBsZS1hcHBzL3Rlbm5lc3NlZS9wcmlzbWEKazhzOmpvZHlAZWsxLnVzLWVhc3QtMi5la3NjdGwuaW86ZGVmYXVsdA==

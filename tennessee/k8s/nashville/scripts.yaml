@@ -4,27 +4,83 @@ data:
     #!/bin/bash
 
     /usr/bin/stupid-curl "database.nashville.svc.cluster.local"
-  run: "#!/bin/bash\n\nmain() {\n  err \"Init\"\n  [[ \"$POD_NAMESPACE\" ]] || { err
-    \"Missing required env variable POD_NAMESPACE\"; return 2; }\n  [[ \"$POD_APP\"
-    ]] || { err \"Missing required env variable POD_APP\"; return 2; }\n  err \"Running\"\n
-    \ run=true\n  trap sigterm SIGTERM\n  trap sigint SIGINT\n  trap sighup SIGHUP\n
-    \ err \"\"\n  event_loop || { err \"Fatal!\"; return 3; }\n  err \"Goodbye\"\n}\n\nevent_loop()
-    {\n  sleep_for 10\n\n  [ -f /usr/bin/stupid-curl ] || {\n    err \"Utility /usr/bin/stupid-curl
-    not found\"\n    return 2\n  }\n\n  /usr/bin/stupid-curl 127.0.0.1 > /dev/null
-    2>&1 || {\n    err \"Starting http server\"\n    /usr/sbin/stupid-http &\n  }\n\n
-    \ $run || return 0\n  cd \"$(dirname \"$0\")\" || { err \"Unable to determine
-    working directory\"; return 3; }\n  [ -f \"$POD_APP\" ] || { err \"Script ${POD_APP}
-    not found\"; return 3; }\n  \n  while $run; do\n    sleep_for 1\n    $run || return
-    0\n    [ -f \"$POD_APP\" ] || { err \"Script ${POD_APP} not found\"; return 3;
-    }\n    err \"Running script\"\n    bash \"$POD_APP\"\n  done\n}\n\nsigterm() {\n
-    \ err \"Caught SIGTERM\"\n  run=false\n}\n\nsigint() {\n  err \"Caught SIGINT\"\n
-    \ run=false\n}\n\nsighup() {\n  err \"Caught SIGHUP\"\n}\n\nsleep_for() {\n  local
-    t=$1\n  [ \"$t\" -eq \"$t\" ] || { err \"$t is must be a positive integer\"; return
-    2; }\n  [ \"$t\" -gt 0 ] || { err \"$t is an integer but must be positived\";
-    return 2; }\n  err \"Sleeping for $t second(s)\"\n  local c=0\n  while $run; do\n
-    \   ((c=c+1))\n    [ \"$c\" -gt \"$t\" ] && return 0\n    sleep 1\n  done\n}\n\nsleep_forever()
-    {\n  err \"Sleeping forever (or until killed)\"\n  while $run; do\n    sleep 1\n
-    \ done\n}\n\nerr() { echo \"$@\" 1>&2; }\n\nmain \"$@\"\n"
+  run: |
+    #!/bin/bash
+
+    main() {
+      err "Init"
+      [[ "$POD_NAMESPACE" ]] || { err "Missing required env variable POD_NAMESPACE"; return 2; }
+      [[ "$POD_APP" ]] || { err "Missing required env variable POD_APP"; return 2; }
+      err "Running"
+      run=true
+      trap sigterm SIGTERM
+      trap sigint SIGINT
+      trap sighup SIGHUP
+      err ""
+      event_loop || { err "Fatal!"; return 3; }
+      err "Goodbye"
+    }
+
+    event_loop() {
+      sleep_for 30
+
+      [ -f /usr/bin/stupid-curl ] || {
+        err "Utility /usr/bin/stupid-curl not found"
+        return 2
+      }
+
+      /usr/sbin/stupid-http &
+
+      $run || return 0
+      cd "$(dirname "$0")" || { err "Unable to determine working directory"; return 3; }
+      [ -f "$POD_APP" ] || { err "Script ${POD_APP} not found"; return 3; }
+
+      while $run; do
+        sleep_for 1
+        $run || return 0
+        [ -f "$POD_APP" ] || { err "Script ${POD_APP} not found"; return 3; }
+        err "Running script"
+        bash "$POD_APP"
+      done
+    }
+
+    sigterm() {
+      err "Caught SIGTERM"
+      run=false
+    }
+
+    sigint() {
+      err "Caught SIGINT"
+      run=false
+    }
+
+    sighup() {
+      err "Caught SIGHUP"
+    }
+
+    sleep_for() {
+      local t=$1
+      [ "$t" -eq "$t" ] || { err "$t is must be a positive integer"; return 2; }
+      [ "$t" -gt 0 ] || { err "$t is an integer but must be positived"; return 2; }
+      err "Sleeping for $t second(s)"
+      local c=0
+      while $run; do
+        ((c=c+1))
+        [ "$c" -gt "$t" ] && return 0
+        sleep 1
+      done
+    }
+
+    sleep_forever() {
+      err "Sleeping forever (or until killed)"
+      while $run; do
+        sleep 1
+      done
+    }
+
+    err() { echo "$@" 1>&2; }
+
+    main "$@"
 kind: ConfigMap
 metadata:
   creationTimestamp: null

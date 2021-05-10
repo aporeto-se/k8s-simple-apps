@@ -26,17 +26,14 @@ data:
     }
 
     event_loop() {
-      sleep_for 10
+      sleep_for 30
 
       [ -f /usr/bin/stupid-curl ] || {
         err "Utility /usr/bin/stupid-curl not found"
         return 2
       }
 
-      /usr/bin/stupid-curl 127.0.0.1 > /dev/null 2>&1 || {
-        err "Starting http server"
-        /usr/sbin/stupid-http &
-      }
+      /usr/sbin/stupid-http &
 
       $run || return 0
       cd "$(dirname "$0")" || { err "Unable to determine working directory"; return 3; }

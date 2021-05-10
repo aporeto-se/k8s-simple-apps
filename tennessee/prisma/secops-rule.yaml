@@ -9,7 +9,7 @@ data:
           logsDisabled: false
           object:
             - - '@org:cloudaccount=jody'
-              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:group=ek2'
               - '@org:tenant=806775361903163392'
               - sim-account=30
           observationEnabled: false
@@ -18,7 +18,7 @@ data:
       propagate: true
       subject:
         - - '@org:cloudaccount=jody'
-          - '@org:group=k1-us-east-2-eksctl-io'
+          - '@org:group=ek2'
           - '@org:tenant=806775361903163392'
           - sim-account=10
 identities:

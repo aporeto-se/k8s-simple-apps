@@ -6,7 +6,7 @@ data:
           logsDisabled: false
           object:
             - - '@org:cloudaccount=jody'
-              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:group=ek2'
               - '@org:tenant=806775361903163392'
               - '@org:kubernetes=nashville'
               - app=database
@@ -17,7 +17,7 @@ data:
           logsDisabled: false
           object:
             - - '@org:cloudaccount=jody'
-              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:group=ek2'
               - '@org:tenant=806775361903163392'
               - '@org:kubernetes=memphis'
               - app=backend
@@ -28,7 +28,7 @@ data:
           logsDisabled: false
           object:
             - - '@org:cloudaccount=jody'
-              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:group=ek2'
               - '@org:tenant=806775361903163392'
               - '@org:kubernetes=knoxville'
               - app=backend
@@ -41,7 +41,7 @@ data:
           logsDisabled: false
           object:
             - - '@org:cloudaccount=jody'
-              - '@org:group=k1-us-east-2-eksctl-io'
+              - '@org:group=ek2'
               - '@org:tenant=806775361903163392'
               - '@org:kubernetes=nashville'
               - app=database
@@ -51,7 +51,7 @@ data:
       propagate: true
       subject:
         - - '@org:cloudaccount=jody'
-          - '@org:group=k1-us-east-2-eksctl-io'
+          - '@org:group=ek2'
           - '@org:tenant=806775361903163392'
           - '@org:kubernetes=nashville'
           - app=database
