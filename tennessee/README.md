@@ -33,7 +33,7 @@ You should have a Kubernetes cluster with the Prisma enforcers deployed. Additio
 2. Prisma binary 'apoctl' and config (if you do not have these see steps to create below)
 3. This repo
 
-The binary 'apoctl' can be downloaded from these locations.
+The binary 'apoctl' should be installed on your workstation in your path
 [darwin](https://download.aporeto.com/prismacloud/app2/apoctl/darwin/apoctl)
 [linux](https://download.aporeto.com/prismacloud/app2/apoctl/linux/apoctl)
 
