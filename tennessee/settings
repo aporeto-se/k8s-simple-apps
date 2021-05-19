@@ -1,0 +1,54 @@
+# TENANT is a required setting.
+export TENANT=806775361903163392
+
+# CLOUD is required for any policy at and below the CLOUD level.
+# You will almost certainly need it to be set.
+export CLOUD=jody
+
+# GROUP is required for any policy at and below the GROUP (or Kubernetes)
+# level. You will almost certainly need it to be set.
+export GROUP=ek1-us-east-2-eksctl-io
+
+# If KUBE_DNS is set to auto or one or more IP addresses or CIDRs then a
+# network and policy will be created at the Kubernetes cluster level to permit
+# flows from any PU within the cluster to said DNS server on ports udp/53 and
+# tcp/53. If set to auto then the kube API will be queried to determine the
+# address.
+export KUBE_DNS=auto
+# export KUBE_DNS=1.1.1.1 2.2.2.2
+
+# If KUBE_NODES is set to auto or one or more IP addresses, CIDRs or FQDNs then
+# a network and policy will be created to permit KUBE_NODES to any PU within
+# the cluster. This is often necessary for health checks that originate from
+# the host.  If set to auto then the kube API will be queried to determine
+# the address.
+export KUBE_NODES=auto
+# export KUBE_NODES=2.2.2.2 3.3.3.3 hostname.domain
+
+# If CLOUD_DNS is set to one or more IP addresses or CIDRs then a network and
+# policy will be created to allow any PU within the cloud to said DNS server on
+# ports udp/53 and tcp/53. Note that currently auto is not supported.
+# export CLOUD_DNS=1.1.1.1 2.2.2.2
+
+# If CLOUD_NTP is set to one or more IP addresses, CIDRs or FQDN's then a
+# network and policy will be created to permit any PU within the CLOUD to said
+# NTP server on port udp/123. Note that currently auto is not supported but it
+# has been set to a default of 169.254.169.123.
+export CLOUD_NTP=169.254.169.123
+# export CLOUD_NTP=pool.ntp.org
+# export CLOUD_NTP=169.254.169.123 10.10.10.10 11.11.11.11
+
+# If META_DATA_API is set a network and policy will be created to allow any PU
+# within the cloud to access this service on port 80
+export META_DATA_API=169.254.169.254
+
+# If ISTIO_ENABLED is set to true then policies will be created to permit Istio
+
+# All of the APOCTL variables may be set
+export APOCTL_CREDS=$HOME/.apoctl/default.creds
+export APOCTL_API="https://api.east-01.network.prismacloud.io"
+# export APOCTL_API_SKIP_VERIFY=false # default
+# export APOCTL_API=
+# export APOCTL_NAMESPACE=
+
+export PATH=$PWD/bin/scripts:$PWD/bin/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -m):$PATH

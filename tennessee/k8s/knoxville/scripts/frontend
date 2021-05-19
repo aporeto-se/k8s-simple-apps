@@ -1,3 +1,0 @@
-#!/bin/bash
-
-/usr/bin/stupid-curl "backend.${POD_NAMESPACE}.svc.cluster.local"

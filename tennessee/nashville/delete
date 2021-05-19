@@ -1,0 +1,27 @@
+#!/bin/bash -e
+
+function main() {
+  rc=0
+  ns="nashville"
+
+  kubectl get ns $ns > /dev/null 2>&1 && {
+    err "Deleting Kubernetes Namespace $ns"
+    kubectl delete ns $ns || rc=3
+  } || {
+    err "Kubernetes Namespace $ns does not exist"
+  }
+
+  id=$(apoctl api list namespaces -n "/806775361903163392/jody/ek1-us-east-2-eksctl-io" -f "name==/806775361903163392/jody/ek1-us-east-2-eksctl-io/nashville" | jq -r '.[].ID')
+  [[ "$id" ]] && {
+    err "Deleting Prisma Namespace $ns with id $id"
+    apoctl api delete namespace "/806775361903163392/jody/ek1-us-east-2-eksctl-io/nashville" || rc=3
+  } || {
+    err "Prisma Namespace $ns does not exist"
+  }
+  return "$rc"
+}
+
+function err() { echo "$@" 1>&2; }
+
+main "$@"
+

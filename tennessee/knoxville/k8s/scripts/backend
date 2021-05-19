@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# The backend forms a cluster with other backends in the same namespace and
+# it talks to the database running in the application Nashville
+
+/usr/bin/stupid-curl "${POD_APP}.${POD_NAMESPACE}.svc.cluster.local"
+
+/usr/bin/stupid-curl "database.nashville.svc.cluster.local"

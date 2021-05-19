@@ -1,0 +1,84 @@
+#!/bin/bash -e
+# shellcheck disable=
+
+function main() {
+
+  cd "$(dirname "$0")" || { err "Unable to find install path"; return 2; }
+
+  local ns args newArgs import key tmp file skip tenant cloud group input
+
+  ns="$APOCTL_NAMESPACE"
+  args=()
+  newArgs=("real-apoctl")
+  import=false
+
+  for key in "$@"; do
+    args+=("$key")
+  done
+
+  tmp=$(mktemp)
+  # shellcheck disable=SC2064
+  trap "rm -rf $tmp" EXIT
+
+   skip=false
+   for i in "${!args[@]}"; do
+     key=${args[$i]}
+     $skip && { skip=false; continue; }
+     case $key in
+       -f|--file) newArgs+=("$key"); file="${args[$((i+1))]}"; newArgs+=("$tmp"); skip=true;;
+       -n|--namespace) newArgs+=("$key"); ns="${args[$((i+1))]}"; newArgs+=("$ns"); skip=true;;
+       import) newArgs+=("$key"); import=true;;
+       *) newArgs+=("$key");;
+     esac
+   done
+
+  # Check if import flag is set.
+  "$import" || {
+    # shellcheck disable=SC2068
+    real-apoctl ${args[@]}; return $?;
+  }
+
+  # If the import flag is set then make sure the file is also set
+  # it is not then we will run as is so the real binary will give
+  # an error.
+  [[ "$file" ]] || {
+    # shellcheck disable=SC2068
+    real-apoctl ${args[@]}; return $?;
+  }
+
+  # err "ns:$ns"
+  # err "file:$file"
+  # err "import:$import"
+
+  [[ "$ns" ]] && {
+    tenant="$(echo "$ns" | awk -F/ '{print $2}')"
+    cloud="$(echo "$ns" | awk -F/ '{print $3}')"
+    group="$(echo "$ns" | awk -F/ '{print $4}')"
+  }
+
+  input="$(<"$file")"
+
+  [[ "$tenant" ]] && { input=${input//"{{.Values.org.tenant}}"/$tenant}; }
+  [[ "$cloud" ]] && { input=${input//"{{.Values.org.cloudAccount}}"/$cloud}; }
+  [[ "$group" ]] && { input=${input//"{{.Values.org.group}}"/$group}; }
+
+  echo "$input" | grep -q "{{.Values.org.cloudAccount}}" && {
+    err "Namespace does not include 'cloudAccount' but 'Values.org.cloudAccount' is referenced in the import file"
+    return 3
+  }
+
+  echo "$input" | grep -q "{{.Values.org.group}}" && {
+    err "Namespace does not include 'group' but 'Values.org.group' is referenced in the import file"
+    return 3
+  }
+
+  echo "$input" > "$tmp"
+
+  # shellcheck disable=SC2068
+  ${newArgs[@]}
+  return $?
+}
+
+function err() { echo "$@" 1>&2; }
+
+main "$@"

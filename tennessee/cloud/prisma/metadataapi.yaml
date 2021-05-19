@@ -1,0 +1,35 @@
+APIVersion: 0
+data:
+  externalnetworks:
+    - annotations:
+      associatedTags:
+        - 'externalnetwork:name=Meta Data API'
+      name: Meta Data API
+      propagate: true
+      entries:
+        - 169.254.169.254
+  networkrulesetpolicies:
+    - annotations:
+      associatedTags:
+      description: Permit any to cloud Meta Data API
+      name: Meta Data API
+      outgoingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+              - '@org:group={{.Values.org.group}}'
+              - '@org:tenant={{.Values.org.tenant}}'
+              - 'externalnetwork:name=Meta Data API'
+          observationEnabled: false
+          protocolPorts:
+            - tcp/80
+      propagate: true
+      subject:
+        - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+          - '@org:group={{.Values.org.group}}'
+          - '@org:tenant={{.Values.org.tenant}}'
+identities:
+  - networkrulesetpolicy
+  - externalnetwork
+label: CICDv1 Tennessee-Cloud-MetaDataAPI

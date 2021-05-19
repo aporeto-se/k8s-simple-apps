@@ -1,3 +1,0 @@
-#!/bin/bash
-
-/usr/bin/stupid-curl "database.nashville.svc.cluster.local"

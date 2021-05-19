@@ -1,0 +1,58 @@
+#!/bin/bash -e
+
+function main() {
+  cd "$(dirname "$0")" || { err "unable to change directory"; return 2; }
+
+  local missingSetting
+  missingSetting=false
+  [[ "$TENANT" ]] || { err "Missing TENANT"; missingSetting=true; }
+  [[ "$CLOUD" ]] || { err "Missing CLOUD"; missingSetting=true; }
+  [[ "$GROUP" ]] || { err "Missing GROUP"; missingSetting=true; }
+  "$missingSetting" && { err "Did you update and source settings?"; return 3; }
+
+  echo "#!/bin/bash -e" > create
+  chmod +x create
+
+  [[ "$KUBE_DNS" ]] && {
+    [ "$KUBE_DNS" == "auto" ] && {
+      KUBE_DNS=$(kubectl get services -n kube-system kube-dns -o=jsonpath="{.spec.clusterIP}")
+      [[ "$KUBE_DNS" ]] || { err "Unable to resolve kube dns; please set KUBE_DNS in settings"; return 3; }
+    }
+    # shellcheck disable=SC2086
+    update prisma/dns.yaml $KUBE_DNS
+    echo "apoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/dns.yaml" >> create
+  }
+
+  [[ "$KUBE_NODES" ]] && {
+    [ "$KUBE_NODES" == "auto" ] && {
+      KUBE_NODES=$(kubectl get nodes -o=jsonpath="{.items[*].status.addresses[0].address}")
+      [[ "$KUBE_NODES" ]] || { err "Unable to resolve kube nodes; please set KUBE_NODES in settings"; return 3; }
+    }
+    # shellcheck disable=SC2086
+    update prisma/nodes.yaml $KUBE_NODES
+    echo "apoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/nodes.yaml" >> create
+  }
+
+  return 0
+}
+
+function update() {
+  local node file
+  file=$1
+  clean "$file"
+  shift
+  # shellcheck disable=SC2068
+  for node in $@; do
+    yq -i e ".data.externalnetworks[0].entries += [\"$node\"]" "$file"
+  done
+}
+
+function clean() {
+  local file
+  file=$1
+  yq -i e "del(.data.externalnetworks[0].entries)" "$file"
+}
+
+function err() { echo "$@" 1>&2; }
+
+main "$@"

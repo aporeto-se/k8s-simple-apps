@@ -1,0 +1,34 @@
+APIVersion: 0
+data:
+  externalnetworks:
+    - annotations:
+      associatedTags:
+        - 'externalnetwork:name=Kube DNS'
+      name: Kube DNS
+      propagate: true
+  networkrulesetpolicies:
+    - annotations:
+      associatedTags:
+      description: Kube DNS
+      name: Kube DNS
+      outgoingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+              - '@org:group={{.Values.org.group}}'
+              - '@org:tenant={{.Values.org.tenant}}'
+              - 'externalnetwork:name=Kube DNS'
+          observationEnabled: false
+          protocolPorts:
+            - tcp/53
+            - udp/53
+      propagate: true
+      subject:
+        - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+          - '@org:group={{.Values.org.group}}'
+          - '@org:tenant={{.Values.org.tenant}}'
+identities:
+  - networkrulesetpolicy
+  - externalnetwork
+label: CICDv1 Tennessee-Cloud-DNS

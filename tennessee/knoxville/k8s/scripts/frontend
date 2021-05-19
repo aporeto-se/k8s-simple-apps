@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# The frontend talks to the backend only.
+
+/usr/bin/stupid-curl "backend.${POD_NAMESPACE}.svc.cluster.local"

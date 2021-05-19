@@ -1,0 +1,15 @@
+APIVersion: 0
+data:
+  externalnetworks:
+    - annotations:
+    - associatedTags:
+        - 'externalnetwork:name=Any'
+        - 'externalnetwork:name=External'
+        - 'externalnetwork:name=Internet'
+      entries:
+        - 0.0.0.0/0
+      name: Internet
+      propagate: true
+identities:
+  - externalnetwork
+label: CICDv1 Tennessee-Cloud-Internet

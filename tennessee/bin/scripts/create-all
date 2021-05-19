@@ -1,0 +1,26 @@
+#!/bin/bash -e
+
+function main() {
+  cd "$(dirname "$0")" || { err "unable to change directory"; return 2; }
+
+  err "creating cloud"
+  ../../cloud/create
+
+  err "creating group"
+  ../../group/create
+
+  err "creating nashville"
+  ../../nashville/create
+
+  err "creating memphis"
+  ../../memphis/create
+
+  err "creating knoxville"
+  ../../knoxville/create
+
+  return 0
+}
+
+function err() { echo "$@" 1>&2; }
+
+main "$@"

@@ -1,0 +1,37 @@
+APIVersion: 0
+data:
+  externalnetworks:
+    - annotations:
+      associatedTags:
+        - 'externalnetwork:name=Kube Nodes'
+      name: Kube Nodes
+      propagate: true
+      entries:
+        - 192.168.36.24
+        - 192.168.87.62
+        - 192.168.9.75
+  networkrulesetpolicies:
+    - annotations:
+      associatedTags:
+      description: 'Permit Kube Nodes to any PU'
+      incomingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+              - '@org:group={{.Values.org.group}}'
+              - '@org:tenant={{.Values.org.tenant}}'
+              - 'externalnetwork:name=Kube Nodes'
+          observationEnabled: false
+          protocolPorts:
+            - any
+      name: Kube Nodes
+      propagate: true
+      subject:
+        - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+          - '@org:group={{.Values.org.group}}'
+          - '@org:tenant={{.Values.org.tenant}}'
+identities:
+  - networkrulesetpolicy
+  - externalnetwork
+label: CICDv1 Tennessee-Group-Nodes

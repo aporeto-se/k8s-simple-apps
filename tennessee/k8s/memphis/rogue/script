@@ -1,6 +1,0 @@
-/usr/bin/stupid-curl "frontend.memphis.svc.cluster.local"
-/usr/bin/stupid-curl "backend.memphis.svc.cluster.local"
-/usr/bin/stupid-curl "frontend.knoxville.svc.cluster.local"
-/usr/bin/stupid-curl "backend.knoxville.svc.cluster.local"
-/usr/bin/stupid-curl "database.nashville.svc.cluster.local"
-exit 0

@@ -1,0 +1,29 @@
+APIVersion: 0
+data:
+  externalnetworks:
+    - associatedTags:
+        - 'externalnetwork:name=NTP'
+      name: NTP
+      propagate: true
+      entries:
+        - 169.254.169.123
+  networkrulesetpolicies:
+    - name: NTP
+      outgoingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+              - '@org:tenant={{.Values.org.tenant}}'
+              - 'externalnetwork:name=NTP'
+          observationEnabled: false
+          protocolPorts:
+            - udp/123
+      propagate: true
+      subject:
+        - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
+          - '@org:tenant={{.Values.org.tenant}}'
+identities:
+  - networkrulesetpolicy
+  - externalnetwork
+label: CICDv1 Tennessee-Cloud-NTP
