@@ -11,25 +11,25 @@ function main() {
   "$missingSetting" && { err "Did you update and source settings?"; return 3; }
 
   echo "#!/bin/bash -e" > create
-  echo "apoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/secops.yaml" >> create
+  echo "xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/secops.yaml" >> create
   chmod +x create
 
   [[ "$CLOUD_NTP" ]] && {
     # shellcheck disable=SC2086
     update prisma/ntp.yaml $CLOUD_NTP
-    echo "apoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/ntp.yaml" >> create
+    echo "xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/ntp.yaml" >> create
   }
 
   [[ "$CLOUD_DNS" ]] && {
     # shellcheck disable=SC2086
     update prisma/dns.yaml $CLOUD_DNS
-    echo "apoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/dns.yaml" >> create
+    echo "xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/dns.yaml" >> create
   }
 
   [[ "$META_DATA_API" ]] && {
     # shellcheck disable=SC2086
     update prisma/metadataapi.yaml $META_DATA_API
-    echo "apoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/metadataapi.yaml" >> create
+    echo "xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/metadataapi.yaml" >> create
   }
 
   return 0

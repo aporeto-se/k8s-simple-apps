@@ -20,7 +20,7 @@ function main() {
     }
     # shellcheck disable=SC2086
     update prisma/dns.yaml $KUBE_DNS
-    echo "apoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/dns.yaml" >> create
+    echo "xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/dns.yaml" >> create
   }
 
   [[ "$KUBE_NODES" ]] && {
@@ -30,7 +30,7 @@ function main() {
     }
     # shellcheck disable=SC2086
     update prisma/nodes.yaml $KUBE_NODES
-    echo "apoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/nodes.yaml" >> create
+    echo "xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/nodes.yaml" >> create
   }
 
   return 0

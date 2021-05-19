@@ -9,6 +9,14 @@ export CLOUD=jody
 # level. You will almost certainly need it to be set.
 export GROUP=ek1-us-east-2-eksctl-io
 
+# All of the APOCTL variables may be set
+export APOCTL_CREDS=$HOME/.apoctl/default.creds
+export APOCTL_API="https://api.east-01.network.prismacloud.io"
+# export APOCTL_API_SKIP_VERIFY=false # default
+# export APOCTL_API=
+# export APOCTL_NAMESPACE=
+
+
 # If KUBE_DNS is set to auto or one or more IP addresses or CIDRs then a
 # network and policy will be created at the Kubernetes cluster level to permit
 # flows from any PU within the cluster to said DNS server on ports udp/53 and
@@ -43,12 +51,5 @@ export CLOUD_NTP=169.254.169.123
 export META_DATA_API=169.254.169.254
 
 # If ISTIO_ENABLED is set to true then policies will be created to permit Istio
-
-# All of the APOCTL variables may be set
-export APOCTL_CREDS=$HOME/.apoctl/default.creds
-export APOCTL_API="https://api.east-01.network.prismacloud.io"
-# export APOCTL_API_SKIP_VERIFY=false # default
-# export APOCTL_API=
-# export APOCTL_NAMESPACE=
 
 export PATH=$PWD/bin/scripts:$PWD/bin/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -m):$PATH

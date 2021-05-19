@@ -3,4 +3,4 @@ cd "$(dirname "$0")"
 kubectl apply -f /Users/jscott/workspace/k8s-simple-apps/tennessee/memphis/k8s/ns.yaml
 sleep 2
 kubectl apply -f /Users/jscott/workspace/k8s-simple-apps/tennessee/memphis/k8s
-apoctl api import -n "/806775361903163392/jody/ek1-us-east-2-eksctl-io/memphis" --file "/Users/jscott/workspace/k8s-simple-apps/tennessee/memphis"/prisma/config.yaml
+xapoctl api import -n "/806775361903163392/jody/ek1-us-east-2-eksctl-io/memphis" --file "/Users/jscott/workspace/k8s-simple-apps/tennessee/memphis"/prisma/config.yaml
