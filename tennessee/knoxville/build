@@ -24,7 +24,7 @@ cd "\$(dirname "\$0")"
 kubectl apply -f $PWD/k8s/ns.yaml
 sleep 2
 kubectl apply -f $PWD/k8s
-apoctl api import -n "/$TENANT/$CLOUD/$GROUP/$(basename "$PWD")" --file prisma/config.yaml
+apoctl api import -n "/$TENANT/$CLOUD/$GROUP/$(basename "$PWD")" --file "$PWD"/prisma/config.yaml
 EOF
 }
 
