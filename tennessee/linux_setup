@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+curl -o /tmp/apoctl https://download.aporeto.com/prismacloud/app2/apoctl/linux/apoctl
+chmod +x /tmp/apoctl
+sudo mv /tmp/apoctl /usr/local/bin
