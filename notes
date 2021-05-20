@@ -1,0 +1,8 @@
+@org:kubernetes=istio-system
+
+app=istio-ingressgateway
+
+app=frontend
+
+app=istiod
+

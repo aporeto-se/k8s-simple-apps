@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function main() {
+  cd "$(dirname "$0")" || { err "unable to change directory"; return 2; }
+
+  fail=false
+
+  ../cloud/"$(basename "$0")" || { fail=true; }
+  ../group/"$(basename "$0")" || { fail=true; }
+  ../nashville/"$(basename "$0")" || { fail=true; }
+  ../memphis/"$(basename "$0")" || { fail=true; }
+  ../knoxville/"$(basename "$0")" || { fail=true; }
+
+  "$fail" && { err "One or more failures"; return 3; }
+
+  return 0
+}
+
+function err() { echo "$@" 1>&2; }
+
+main "$@"

@@ -1,30 +1,62 @@
 #!/bin/bash -e
 
 function main() {
+
   cd "$(dirname "$0")" || { err "unable to change directory"; return 2; }
+  err "building $(basename "$PWD")"
+
+  [ -f settings ] && { source settings; }
+  [ -f ../settings ] && { source ../settings; }
 
   local missingSetting
   missingSetting=false
   [[ "$TENANT" ]] || { err "Missing TENANT"; missingSetting=true; }
   [[ "$CLOUD" ]] || { err "Missing CLOUD"; missingSetting=true; }
   [[ "$GROUP" ]] || { err "Missing GROUP"; missingSetting=true; }
-  "$missingSetting" && { err "Did you update and source settings?"; return 3; }
+  "$missingSetting" && { err "Failure building $(basename "$PWD"); see above"; return $?; }
+
+  _setup || { err "Failure building $(basename "$PWD"); see above"; return $?; }
+  _main || { err "Failure building $(basename "$PWD"); see above"; return $?; }
+  return 0
+}
+
+function _main() {
   echo_create > create
   echo_delete > delete
   echo_restart > restart
+
+  rm -rf k8s
+  cp -r _k8s k8s
+  [[ "$ISTIO_ENABLED" ]] && { 
+    err "Istio is enabled"
+    cp istio/* k8s;
+  } || {
+    err "Istio is not enabled"
+  }
+
   chmod +x create delete restart
   return 0
+}
+
+function _setup() {
+  thisDir="$PWD"
+  cd ../bin/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -m)
+  jq="$PWD/jq"
+  yq="$PWD/yq"
+  cd "$thisDir"
+  cd ../bin/scripts
+  xapoctl="$PWD/xapoctl"
+  cd "$thisDir"
 }
 
 function echo_create()
 {
 cat <<EOF
 #!/bin/bash -e
-cd "\$(dirname "\$0")"
 kubectl apply -f $PWD/k8s/ns.yaml
 sleep 2
 kubectl apply -f $PWD/k8s
-xapoctl api import -n "/$TENANT/$CLOUD/$GROUP/$(basename "$PWD")" --file "$PWD"/prisma/config.yaml
+$xapoctl api import -n "/$TENANT/$CLOUD/$GROUP/$(basename "$PWD")" --file "$PWD"/prisma/config.yaml
 EOF
 }
 
@@ -44,7 +76,7 @@ function main() {
     err "Kubernetes Namespace \$ns does not exist"
   }
 
-  id=\$(apoctl api list namespaces -n "/$TENANT/$CLOUD/$GROUP" -f "name==/$TENANT/$CLOUD/$GROUP/$(basename "$PWD")" | jq -r '.[].ID')
+  id=\$($xapoctl api list namespaces -n "/$TENANT/$CLOUD/$GROUP" -f "name==/$TENANT/$CLOUD/$GROUP/$(basename "$PWD")" | $jq -r '.[].ID')
   [[ "\$id" ]] && {
     err "Deleting Prisma Namespace \$ns with id \$id"
     apoctl api delete namespace "/$TENANT/$CLOUD/$GROUP/$(basename "$PWD")" || rc=3

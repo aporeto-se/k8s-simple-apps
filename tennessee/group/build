@@ -1,14 +1,26 @@
 #!/bin/bash -e
 
 function main() {
+ 
   cd "$(dirname "$0")" || { err "unable to change directory"; return 2; }
+  err "building $(basename "$PWD")"
+
+  [ -f settings ] && { source settings; }
+  [ -f ../settings ] && { source ../settings; }
 
   local missingSetting
   missingSetting=false
   [[ "$TENANT" ]] || { err "Missing TENANT"; missingSetting=true; }
   [[ "$CLOUD" ]] || { err "Missing CLOUD"; missingSetting=true; }
   [[ "$GROUP" ]] || { err "Missing GROUP"; missingSetting=true; }
-  "$missingSetting" && { err "Did you update and source settings?"; return 3; }
+  "$missingSetting" && { err "Failure building $(basename "$PWD"); see above"; return $?; }
+
+  _setup || { err "Failure building $(basename "$PWD"); see above"; return $?; }
+  _main || { err "Failure building $(basename "$PWD"); see above"; return $?; }
+  return 0
+}
+
+function _main() {
 
   echo "#!/bin/bash -e" > create
   chmod +x create
@@ -20,7 +32,7 @@ function main() {
     }
     # shellcheck disable=SC2086
     update prisma/dns.yaml $KUBE_DNS
-    echo "xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/dns.yaml" >> create
+    echo "$xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/dns.yaml" >> create
   }
 
   [[ "$KUBE_NODES" ]] && {
@@ -30,10 +42,31 @@ function main() {
     }
     # shellcheck disable=SC2086
     update prisma/nodes.yaml $KUBE_NODES
-    echo "xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/nodes.yaml" >> create
+    echo "$xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/nodes.yaml" >> create
+  }
+
+  [[ "$KUBE_API" ]] && {
+    [ "$KUBE_API" == "auto" ] && {
+      KUBE_API=$(kubectl get svc -n default -o=jsonpath="{.items[*].spec.clusterIP}")
+      [[ "$KUBE_API" ]] || { err "Unable to resolve kube api; please set KUBE_API in settings"; return 3; }
+    }
+    # shellcheck disable=SC2086
+    update prisma/kubeapi.yaml $KUBE_API
+    echo "$xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/kubeapi.yaml" >> create
   }
 
   return 0
+}
+
+function _setup() {
+  thisDir="$PWD"
+  cd ../bin/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -m)
+  jq="$PWD/jq"
+  yq="$PWD/yq"
+  cd "$thisDir"
+  cd ../bin/scripts
+  xapoctl="$PWD/xapoctl"
+  cd "$thisDir"
 }
 
 function update() {
@@ -43,14 +76,14 @@ function update() {
   shift
   # shellcheck disable=SC2068
   for node in $@; do
-    yq -i e ".data.externalnetworks[0].entries += [\"$node\"]" "$file"
+    $yq -i e ".data.externalnetworks[0].entries += [\"$node\"]" "$file"
   done
 }
 
 function clean() {
   local file
   file=$1
-  yq -i e "del(.data.externalnetworks[0].entries)" "$file"
+  $yq -i e "del(.data.externalnetworks[0].entries)" "$file"
 }
 
 function err() { echo "$@" 1>&2; }

@@ -9,7 +9,7 @@ function main() {
 
   ns="$APOCTL_NAMESPACE"
   args=()
-  newArgs=("real-apoctl")
+  newArgs=("apoctl")
   import=false
 
   for key in "$@"; do

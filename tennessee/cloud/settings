@@ -1,0 +1,17 @@
+# TENANT is a required setting.
+# If CLOUD_DNS is set to one or more IP addresses or CIDRs then a network and
+# policy will be created to allow any PU within the cloud to said DNS server on
+# ports udp/53 and tcp/53. Note that currently auto is not supported.
+# export CLOUD_DNS=1.1.1.1 2.2.2.2
+
+# If CLOUD_NTP is set to one or more IP addresses, CIDRs or FQDN's then a
+# network and policy will be created to permit any PU within the CLOUD to said
+# NTP server on port udp/123. Note that currently auto is not supported but it
+# has been set to a default of 169.254.169.123.
+export CLOUD_NTP=169.254.169.123
+# export CLOUD_NTP=pool.ntp.org
+# export CLOUD_NTP=169.254.169.123 10.10.10.10 11.11.11.11
+
+# If META_DATA_API is set a network and policy will be created to allow any PU
+# within the cloud to access this service on port 80
+export META_DATA_API=169.254.169.254

@@ -11,7 +11,7 @@ function main() {
     err "Kubernetes Namespace $ns does not exist"
   }
 
-  id=$(apoctl api list namespaces -n "/806775361903163392/jody/ek1-us-east-2-eksctl-io" -f "name==/806775361903163392/jody/ek1-us-east-2-eksctl-io/nashville" | jq -r '.[].ID')
+  id=$(/Users/jscott/workspace/k8s-simple-apps/tennessee/bin/scripts/xapoctl api list namespaces -n "/806775361903163392/jody/ek1-us-east-2-eksctl-io" -f "name==/806775361903163392/jody/ek1-us-east-2-eksctl-io/nashville" | /Users/jscott/workspace/k8s-simple-apps/tennessee/bin/darwin/x86_64/jq -r '.[].ID')
   [[ "$id" ]] && {
     err "Deleting Prisma Namespace $ns with id $id"
     apoctl api delete namespace "/806775361903163392/jody/ek1-us-east-2-eksctl-io/nashville" || rc=3

@@ -3,14 +3,16 @@ data:
   externalnetworks:
     - annotations:
       associatedTags:
-        - 'externalnetwork:name=Meta Data API'
-      name: Meta Data API
+        - 'externalnetwork:name=Kube API'
+      name: Kube API
       propagate: true
+      entries:
+        - 10.100.0.1
   networkrulesetpolicies:
     - annotations:
       associatedTags:
-      description: Permit any to cloud Meta Data API
-      name: Meta Data API
+      description: Kube API
+      name: Kube API
       outgoingRules:
         - action: Allow
           logsDisabled: false
@@ -18,10 +20,10 @@ data:
             - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
               - '@org:group={{.Values.org.group}}'
               - '@org:tenant={{.Values.org.tenant}}'
-              - 'externalnetwork:name=Meta Data API'
+              - 'externalnetwork:name=Kube API'
           observationEnabled: false
           protocolPorts:
-            - tcp/80
+            - tcp/443
       propagate: true
       subject:
         - - '@org:cloudaccount={{.Values.org.cloudAccount}}'
@@ -30,4 +32,4 @@ data:
 identities:
   - networkrulesetpolicy
   - externalnetwork
-label: CICDv1 Tennessee-Cloud-MetaDataAPI
+label: CICDv1 Tennessee-Group-API

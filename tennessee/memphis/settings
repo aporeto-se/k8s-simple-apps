@@ -1,0 +1,3 @@
+# If ISTIO_ENABLED is set to true then Kubernetes Istio config will be applied
+# to the application(s). This can be set globally or at the application level.
+# ISTIO_ENABLED=true # default false

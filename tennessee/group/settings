@@ -1,0 +1,21 @@
+# If KUBE_DNS is set to auto or one or more IP addresses or CIDRs then a
+# network and policy will be created at the Kubernetes cluster level to permit
+# flows from any PU within the cluster to said DNS server on ports udp/53 and
+# tcp/53. If set to auto then the kube API will be queried to determine the
+# address.
+export KUBE_DNS=auto
+# export KUBE_DNS=1.1.1.1 2.2.2.2
+
+# If KUBE_NODES is set to auto or one or more IP addresses, CIDRs or FQDNs then
+# a network and policy will be created to permit KUBE_NODES to any PU within
+# the cluster. This is often necessary for health checks that originate from
+# the host.  If set to auto then the kube API will be queried to determine
+# the address.
+export KUBE_NODES=auto
+# export KUBE_NODES=2.2.2.2 3.3.3.3 hostname.domain
+
+# If KUBE_API is set to auto or one or more IP addresses, CIDRs or FQDNs then
+# a network and policy will be created to permit any PU within the cluster to
+# said Kube API on port 443.
+export KUBE_API=auto
+# export KUBE_API=2.2.2.2 3.3.3.3 hostname.domain

@@ -1,0 +1,39 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: knoxville-gateway
+  namespace: knoxville
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: knoxville-virtualservice
+  namespace: knoxville
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - knoxville-gateway
+  http:
+  - match:
+    - uri:
+        exact: /knoxville
+    - uri:
+        exact: /knoxville1
+    - uri:
+        prefix: /knoxville2
+    route:
+    - destination:
+        host: frontend
+        port:
+          number: 80
