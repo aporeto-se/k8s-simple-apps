@@ -11,12 +11,12 @@ export GROUP=ek1-us-east-2-eksctl-io
 
 # If ISTIO_ENABLED is set to true then Kubernetes Istio config will be applied
 # to the application(s). This can be set globally or at the application level.
-export ISTIO_ENABLED=true # default false
+# export ISTIO_ENABLED=true # default false
 
 # All of the APOCTL variables may be set
 export APOCTL_API="https://api.east-01.network.prismacloud.io"
 
-export APOCTL_CREDS=$HOME/.apoctl/default.creds
+# export APOCTL_CREDS=$HOME/.apoctl/default.creds
 # export APOCTL_API_SKIP_VERIFY=false # default
 # export APOCTL_API=
 # export APOCTL_NAMESPACE=

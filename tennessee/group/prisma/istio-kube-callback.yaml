@@ -1,0 +1,35 @@
+APIVersion: 0
+data:
+  externalnetworks:
+    - associatedTags:
+        - 'externalnetwork:name=Kube API Callback'
+      entries:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+      name: Kube API Callback
+      propagate: true
+  networkrulesetpolicies:
+    - incomingRules:
+        - action: Allow
+          logsDisabled: false
+          object:
+            - - '@org:cloudaccount=jody'
+              - '@org:group=ek1-us-east-2-eksctl-io'
+              - '@org:tenant=806775361903163392'
+              - 'externalnetwork:name=Kube API Callback'
+          observationEnabled: false
+          protocolPorts:
+            - any
+      name: Istio Kube Callback
+      propagate: true
+      subject:
+        - - '@org:cloudaccount=jody'
+          - '@org:group=ek1-us-east-2-eksctl-io'
+          - '@org:kubernetes=istio-system'
+          - '@org:tenant=806775361903163392'
+          - app=istiod
+identities:
+  - networkrulesetpolicy
+  - externalnetwork
+label: label: CICDv1 Tennessee-Group-IstioKubeCallback

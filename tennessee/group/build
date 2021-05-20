@@ -55,13 +55,19 @@ function _main() {
     echo "$xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/kubeapi.yaml" >> create
   }
 
+  [[ "$ISTIO_ENABLED" ]] && {
+    "$ISTIO_ENABLED" && { 
+      echo "$xapoctl api import -n /$TENANT/$CLOUD/$GROUP --file $PWD/prisma/istio-kube-callback.yaml" >> create
+    } 
+  }
+
   return 0
 }
 
 function _setup() {
   thisDir="$PWD"
-  cd ../bin/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -m)
-  jq="$PWD/jq"
+  cd ../bin/"$(uname | tr '[:upper:]' '[:lower:]')/$(uname -m)"
+  # jq="$PWD/jq"
   yq="$PWD/yq"
   cd "$thisDir"
   cd ../bin/scripts
@@ -76,14 +82,14 @@ function update() {
   shift
   # shellcheck disable=SC2068
   for node in $@; do
-    $yq -i e ".data.externalnetworks[0].entries += [\"$node\"]" "$file"
+    "$yq" -i e ".data.externalnetworks[0].entries += [\"$node\"]" "$file"
   done
 }
 
 function clean() {
   local file
   file=$1
-  $yq -i e "del(.data.externalnetworks[0].entries)" "$file"
+  "$yq" -i e "del(.data.externalnetworks[0].entries)" "$file"
 }
 
 function err() { echo "$@" 1>&2; }

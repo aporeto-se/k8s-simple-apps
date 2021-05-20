@@ -28,10 +28,7 @@ function _main() {
   rm -rf k8s
   cp -r _k8s k8s
   [[ "$ISTIO_ENABLED" ]] && { 
-    err "Istio is enabled"
     cp istio/* k8s;
-  } || {
-    err "Istio is not enabled"
   }
 
   chmod +x create delete restart
@@ -40,9 +37,9 @@ function _main() {
 
 function _setup() {
   thisDir="$PWD"
-  cd ../bin/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -m)
+  cd "../bin/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -m)"
   jq="$PWD/jq"
-  yq="$PWD/yq"
+  # yq="$PWD/yq"
   cd "$thisDir"
   cd ../bin/scripts
   xapoctl="$PWD/xapoctl"
